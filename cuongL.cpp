@@ -1,4 +1,10 @@
-// Duck Hunt
+//Cuong Le
+//Duck Hunt Game
+
+//I work on the background transparent part.
+//Set boxes (score, hit, round and shot) overlap the original background with size stretch out.
+//Working on the duck sprites with Gerardo, we still working on it.
+//Next i will work for the menu with clickable buttons(One Duck, Two Duck, Setting and Exit) to play the game.
 
 #include <iostream>
 #include <cstdlib>
@@ -114,29 +120,41 @@ struct Game {
 		oneDuck = false;
 		twoDuck = false;
 		
+		//Cuong Le
+		//bullet
 		box[0].width = 45;
 		box[0].height = 35;
 		box[0].center.x = (WINDOW_WIDTH / 10) - (WINDOW_WIDTH / 20);
 		box[0].center.y = WINDOW_HEIGHT - (WINDOW_HEIGHT - floor) - (floor / 1.1);
 		box[0].center.z = 0;
-
+                
+                //count
 		box[1].width = 100;
 		box[1].height = 35;
 		box[1].center.x = WINDOW_WIDTH / 4;
 		box[1].center.y = WINDOW_HEIGHT - (WINDOW_HEIGHT - floor) - (floor / 1.1);
 		box[1].center.z = 0;
 
+                //score
 		box[2].width = 45;
 		box[2].height = 35;
 		box[2].center.x = (WINDOW_WIDTH / 2) + (WINDOW_WIDTH / 4);
 		box[2].center.y = WINDOW_HEIGHT - (WINDOW_HEIGHT - floor) - (floor / 1.1);
 		box[2].center.z = 0;
-
+                
+                //round
 		box[3].width = 45;
 		box[3].height = 35;
 		box[3].center.x = (WINDOW_WIDTH / 10) - (WINDOW_WIDTH / 70);
 		box[3].center.y = WINDOW_HEIGHT - (WINDOW_HEIGHT - floor) - (floor / 1.5);
 		box[3].center.z = 0;
+		
+		//score on shot <-- still working on it
+                box[4].width = 45;
+                box[4].height = 35;
+                box[4].center.x = 0;
+                box[4].center.y = 0;
+                box[4].center.z = 0;
 	}
 };
 
@@ -298,13 +316,11 @@ void init_opengl(void)
 	glEnable(GL_TEXTURE_2D);
 	initialize_fonts();
 	
-    //Cuong Le
-    //
+        //Cuong Le
 	duckImage = ppm6GetImage("./images/duck.ppm");
 	backgroundImage = ppm6GetImage("./images/background.ppm");
 	backgroundTransImage = ppm6GetImage("./images/backgroundTrans.ppm");
-	
-    gameoverbgImage = ppm6GetImage("./images/gameoverbg.ppm");
+	gameoverbgImage = ppm6GetImage("./images/gameoverbg.ppm");
 	
 	//create opengl texture elements
 	glGenTextures(1, &duckTexture);
@@ -535,7 +551,7 @@ int check_keys(XEvent *e, Game *game)
 			game->duckShot = 0;
 			std::cout << "ROUND " << game->rounds << std::endl;
 			game->bullets = 3;
-			//makeDuck(game, rand() % (WINDOW_WIDTH - 50 - 1) + 50 + 1, game->floor + 50 + 1);
+	
 			std::cout << "makeduck" << std::endl;
 			std::cout << "bullets = " << game->bullets << std::endl;
 			if(!game->oneDuck)
@@ -557,8 +573,8 @@ int check_keys(XEvent *e, Game *game)
 			game->duckShot = 0;
 			std::cout << "ROUND " << game->rounds << std::endl;
 			game->bullets = 3;
-			//makeDuck(game, rand() % (WINDOW_WIDTH - 50 - 1) + 50 + 1, game->floor + 50 + 1);
-			//makeDuck(game, rand() % (WINDOW_WIDTH - 50 - 1) + 50 + 1, game->floor + 50 + 1);
+	
+	
 			std::cout << "2 makeduck" << std::endl;
 			std::cout << "bullets = " << game->bullets << std::endl;
 			if(!game->twoDuck)
@@ -652,11 +668,6 @@ void render(Game *game)
 	glClearColor(1.0, 1.0, 1.0, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	//WINDOW HEIGHT??
-	//draw a quad with texture
-	//float wid = 120.0f;
-	//glColor3f(1.0,1.0,1.0);
-
 	if(background) {
 		glBindTexture(GL_TEXTURE_2D, backgroundTexture);
 		glBegin(GL_QUADS);
@@ -688,7 +699,7 @@ void render(Game *game)
 	glVertex2f(WINDOW_WIDTH, game->floor);
 	glEnd();
 
-	//GERARDO
+	
 	//Printing text in Boxes
 	Rect r;
 	//  glClear(GL_COLOR_BUFFER_BIT);
@@ -880,12 +891,6 @@ void render(Game *game)
 //Duck will both change direction since they are the same
 //Pointer variable
 			
-/*			
-			glDisable(GL_TEXTURE_2D);
-			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-			glEnable(GL_BLEND); 
-			glDisable(GL_BLEND);
-		*/
 		}
 	}
 }
