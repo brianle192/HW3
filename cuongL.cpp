@@ -4,7 +4,7 @@
 //I work on the background transparent part.
 //Set boxes (score, hit, round and shot) overlap the original background with size stretch out.
 //Working on the duck sprites with Gerardo, we still working on it.
-//Next i will work for the menu with clickable buttons(One Duck, Two Duck, Setting and Exit) to play the game.
+//Next I will work for the menu with clickable buttons(One Duck, Two Duck, Setting and Exit) to play the game.
 
 #include <iostream>
 #include <cstdlib>
@@ -316,7 +316,7 @@ void init_opengl(void)
 	glEnable(GL_TEXTURE_2D);
 	initialize_fonts();
 	
-        //Cuong Le
+        
 	duckImage = ppm6GetImage("./images/duck.ppm");
 	backgroundImage = ppm6GetImage("./images/background.ppm");
 	backgroundTransImage = ppm6GetImage("./images/backgroundTrans.ppm");
@@ -364,8 +364,8 @@ void init_opengl(void)
 	glTexImage2D(GL_TEXTURE_2D, 0, 3, backgroundImage->width, backgroundImage->height, 0, GL_RGB, GL_UNSIGNED_BYTE, backgroundImage->data); 
 	//-------------------------------------------------------------------
 	
-
-    //forest transparent part
+     //Cuong Le
+     //background transparent part
 	//
 	glBindTexture(GL_TEXTURE_2D, backgroundTransTexture);
 	//
@@ -380,6 +380,7 @@ void init_opengl(void)
 				GL_RGBA, GL_UNSIGNED_BYTE, ftData);
 	delete [] ftData;
 	//-------------------------------------------------------------------
+	
 	//gameover
 	glBindTexture(GL_TEXTURE_2D, gameoverbgTexture);
 	//
