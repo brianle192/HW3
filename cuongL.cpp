@@ -1,10 +1,9 @@
 //Cuong Le
 //Duck Hunt Game
 
-//I work on the background transparent part.
-//Set boxes (score, hit, round and shot) overlap the original background with size stretch out.
-//Working on the duck sprites with Gerardo, we still working on it.
-//Next I will work for the menu with clickable buttons(One Duck, Two Duck, Setting and Exit) to play the game.
+//I worked on some part of the background, the background transparent, and sprites with group .
+//Im working on now for the menu with clickable buttons to Play and Exit  the game. 
+//Next I will working for the background change along with the game's rounds.
 
 #include <iostream>
 #include <cstdlib>
@@ -17,6 +16,8 @@
 #include "ppm.h"
 #include <stdio.h>
 #include <unistd.h> //for sleep function
+#include "stdafx.h"
+#include "MainMenu.h"
 
 //800, 600
 #define WINDOW_WIDTH  800
@@ -120,7 +121,7 @@ struct Game {
 		oneDuck = false;
 		twoDuck = false;
 		
-		//Cuong Le
+		//
 		//bullet
 		box[0].width = 45;
 		box[0].height = 35;
@@ -170,7 +171,7 @@ void makeDuck(Game *game);
 void deleteDuck(Game *game, Duck *duck);
 void check_resize(XEvent *e);
 
-//Cuong Le 
+//
 Ppmimage *backgroundImage = NULL;
 Ppmimage *backgroundTransImage = NULL;
 Ppmimage *gameoverbgImage = NULL;
@@ -218,6 +219,85 @@ int main(void)
 	cleanup_fonts();
 	return 0;
 }
+
+//Menu
+
+MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& window)
+{
+
+	//Load menu image from file
+	sf::Image image;
+	image.LoadFromFile("images/mainmenu.png");
+	sf::Sprite sprite(image);
+
+	//Setup clickable regions
+
+	//Play menu item coordinates
+	MenuItem playButton;
+	playButton.rect.Top= 145;
+	playButton.rect.Bottom = 380;
+	playButton.rect.Left = 0;
+	playButton.rect.Right = 1023;
+	playButton.action = Play;
+
+	//Exit menu item coordinates
+	MenuItem exitButton;
+	exitButton.rect.Left = 0;
+	exitButton.rect.Right = 1023;
+	exitButton.rect.Top = 383;
+	exitButton.rect.Bottom = 560;
+	exitButton.action = Exit;
+
+	_menuItems.push_back(playButton);
+	_menuItems.push_back(exitButton);
+
+	window.Draw(sprite);
+	window.Display();
+
+	return GetMenuResponse(window);
+}
+
+MainMenu::MenuResult MainMenu::HandleClick(int x, int y)
+{
+	std::list<MenuItem>::iterator it;
+
+	for ( it = _menuItems.begin(); it != _menuItems.end(); it++)
+	{
+		sf::Rect<int> menuItemRect = (*it).rect;
+		if( menuItemRect.Bottom > y 
+			&& menuItemRect.Top < y 
+			&& menuItemRect.Left < x 
+			&& menuItemRect.Right > x)
+			{
+				return (*it).action;
+			}
+	}
+
+	return Nothing;
+}
+
+MainMenu::MenuResult  MainMenu::GetMenuResponse(sf::RenderWindow& window)
+{
+	sf::Event menuEvent;
+
+	while(42 != 43)
+	{
+
+		while(window.GetEvent(menuEvent))
+		{
+			if(menuEvent.Type == sf::Event::MouseButtonPressed)
+			{
+				return HandleClick(menuEvent.MouseButton.X,menuEvent.MouseButton.Y);
+			}
+			if(menuEvent.Type == sf::Event::Closed)
+			{
+				return Exit;
+			}
+		}
+	}
+}
+
+//
 
 void set_title(void)
 {
@@ -364,7 +444,7 @@ void init_opengl(void)
 	glTexImage2D(GL_TEXTURE_2D, 0, 3, backgroundImage->width, backgroundImage->height, 0, GL_RGB, GL_UNSIGNED_BYTE, backgroundImage->data); 
 	//-------------------------------------------------------------------
 	
-     //Cuong Le
+     //
      //background transparent part
 	//
 	glBindTexture(GL_TEXTURE_2D, backgroundTransTexture);
